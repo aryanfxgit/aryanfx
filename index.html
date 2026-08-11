@@ -747,6 +747,16 @@ footer{padding:3.6rem 0 3rem;}
     es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('on'); io.unobserve(e.target); } });
   },{threshold:0.05});
   document.querySelectorAll('.rev').forEach(function(el){ io.observe(el); });
+  window.__revealInView = function(){
+    var vh = window.innerHeight;
+    document.querySelectorAll('.rev:not(.on), h1:not(.on), h2:not(.on), .oh:not(.on), .jh:not(.on)').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < vh * 1.2 && r.bottom > -240) el.classList.add('on');
+    });
+  };
+  window.addEventListener('load', function(){ setTimeout(window.__revealInView, 60); });
+  window.addEventListener('hashchange', function(){ setTimeout(window.__revealInView, 80); });
+  setTimeout(window.__revealInView, 600);
 
   var lb=document.getElementById('lb'), lbi=document.getElementById('lbimg');
   function open(im){ lbi.src=im.src; lbi.alt=im.alt; lb.classList.add('on'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
@@ -896,13 +906,11 @@ footer{padding:3.6rem 0 3rem;}
   // ── measure Telegram joins ──
   (function(){
     if(typeof gtag!=='function') return;
-    // TODO: once you create a conversion action in Google Ads it gives you a label
-    // like AW-18379560620/AbC-D_efGhIj. Paste it here to count joins as conversions.
-    var CONVERSION_LABEL = '';
+ var CONVERSION_LABEL = 'AW-18379560620/LE14CNz0_98cEKyth7xE';
     document.querySelectorAll('a[href*="t.me/"]').forEach(function(a){
       a.addEventListener('click',function(){
         gtag('event','join_telegram',{event_category:'outbound',event_label:a.href});
-        if(CONVERSION_LABEL) gtag('event','conversion',{send_to:CONVERSION_LABEL});
+       gtag('event','conversion',{ send_to: CONVERSION_LABEL, value: 1.0, currency: 'INR' });
       });
     });
   })();
